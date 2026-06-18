@@ -786,6 +786,7 @@ function menuForRole(_role: string, menuPermissions?: string[]) {
   // 诊所端所有人权限一致：全菜单
   const menu: Array<[string, string]> = [
     ["desk", "📊 今日工作台"],
+    ["appointments", "📅 预约排期"],
     ["crm", "👥 患者管理"],
     ["treatments", "疗程管理"],
     ["invites", "🎁 邀请管理"],
@@ -809,6 +810,7 @@ function renderClinicSidebar(role: string, menuPermissions?: string[]) {
       label: "日常经营",
       items: [
         ["desk", "今日工作台"],
+        ["appointments", "预约排期"],
         ["crm", "患者管理"],
         ["treatments", "疗程管理"],
         ["tasks", "待办中心"]
@@ -1074,6 +1076,7 @@ function renderApp() {
           <div class="content-stage content-stage--clinic">
             ${state.active.startsWith("patient:") ? renderPatientDetail(state.active.slice("patient:".length)) : ""}
             ${state.active === "desk" ? renderDesk(data) : ""}
+            ${state.active === "appointments" ? renderAppointments(data) : ""}
             ${state.active === "crm" ? renderCrm(data) : ""}
             ${state.active === "treatments" ? renderTreatments(data) : ""}
             ${state.active === "invites" ? renderInvites(data) : ""}
@@ -1213,6 +1216,9 @@ function renderDesk(data: Dashboard) {
 }
 
 function renderCrm(data: Dashboard) {
+  const revisitPending = data.patients.filter((item) => item.revisitStatus === "UNREVISITED").length;
+  const referredPatients = data.patients.filter((item) => (item.source ?? "").includes("推荐")).length;
+  const taggedPatients = data.patients.filter((item) => (item.tags ?? []).length > 0).length;
   return `
     <header class="page-header">
       <div class="page-header__main">
@@ -1221,7 +1227,15 @@ function renderCrm(data: Dashboard) {
         <p class="page-sub">登记新患者、记录购买、查看全部患者档案与复查状态。</p>
       </div>
     </header>
-    <section class="clinic-action-grid">
+    <section class="clinic-summary-strip">
+      <div><span>患者总量</span><strong>${data.patients.length}</strong><small>门店患者基础资产</small></div>
+      <div><span>待复查</span><strong>${revisitPending}</strong><small>需要继续跟进的患者</small></div>
+      <div><span>推荐来源</span><strong>${referredPatients}</strong><small>来自转介绍与推荐</small></div>
+      <div><span>已打标签</span><strong>${taggedPatients}</strong><small>方便后续分层管理</small></div>
+    </section>
+    <section class="crm-workspace">
+      <div class="crm-main-column">
+        <section class="clinic-action-grid">
       <div class="panel action-panel">
         <div class="section-kicker">新患者建档</div>
         <h3>登记新患者</h3>
@@ -1260,6 +1274,34 @@ function renderCrm(data: Dashboard) {
           <td><span class="pill ${item.source?.includes("推荐") ? "rose" : "gray"}">${html(item.source ?? "—")}</span></td>
         </tr>`).join("")}
       </tbody></table></div>
+    </section>
+      </div>
+      <aside class="crm-side-column">
+        <section class="panel crm-side-card">
+          <div class="section-kicker">重点跟进</div>
+          <h3>待复查患者</h3>
+          <div class="crm-side-list">
+            ${data.patients.filter((item) => item.revisitStatus === "UNREVISITED").slice(0, 6).map((item) => `<button type="button" data-patient-id="${html(item.id)}" class="crm-side-list__item">
+              <strong>${html(item.name)}</strong>
+              <span>${html(item.phone ?? "暂无手机号")} · ${(item.tags ?? []).join(" / ") || "待复查"}</span>
+            </button>`).join("") || `<div class="empty-state"><div class="empty-state__title">当前没有待复查患者</div></div>`}
+          </div>
+        </section>
+        <section class="panel crm-side-card">
+          <div class="section-kicker">来源观察</div>
+          <h3>患者来源结构</h3>
+          <div class="crm-side-list">
+            ${Array.from(data.patients.reduce((map, item) => {
+              const key = String(item.source || "其他来源");
+              map.set(key, (map.get(key) ?? 0) + 1);
+              return map;
+            }, new Map<string, number>()).entries() as Iterable<[string, number]>)
+              .sort((a, b) => b[1] - a[1])
+              .slice(0, 6)
+              .map(([source, count]) => `<div class="crm-side-list__stat"><strong>${html(source)}</strong><span>${count} 位患者</span></div>`).join("") || `<div class="empty-state"><div class="empty-state__title">暂无来源数据</div></div>`}
+          </div>
+        </section>
+      </aside>
     </section>`;
 }
 
@@ -1327,7 +1369,7 @@ async function loadPatientDetail(patientId: string) {
       api<any>(`/api/clinic/patients/${patientId}/symptom-logs?limit=200`).catch((e) => ({ error: e?.message })),
       api<any>(`/api/clinic/patients/${patientId}/records`).catch((e) => ({ error: e?.message })),
       api<any>(`/api/clinic/patients/${patientId}/chat-history`).catch((e) => ({ error: e?.message })),
-      api<{ plans: any[] } | { error: string }>(`/api/clinic/cervical-treatment-agent?patientId=${encodeURIComponent(patientId)}`).catch((e) => ({ error: e?.message }))
+      api<{ plans: any[] }>(`/api/clinic/cervical-treatment-agent?patientId=${encodeURIComponent(patientId)}`).catch((e) => ({ error: e?.message }))
     ]);
     const detail = state.patientDetailCache[patientId]!;
     detail.menstrual = menstrual?.error ? undefined : menstrual;
@@ -1859,6 +1901,13 @@ function bindCrmRowNavigation() {
       activateClinicWorkspaceTab("patient:" + patientId, patientId);
     };
   });
+  document.querySelectorAll<HTMLButtonElement>(".crm-side-list__item[data-patient-id]").forEach((button) => {
+    button.onclick = () => {
+      const patientId = button.dataset.patientId;
+      if (!patientId) return;
+      activateClinicWorkspaceTab("patient:" + patientId, patientId);
+    };
+  });
 }
 
 function bindPatientDetailHandlers() {
@@ -2227,6 +2276,111 @@ function renderKnowledgeSearchV2(data: Dashboard) {
     </section>`;
 }
 
+function renderAppointments(data: Dashboard) {
+  const visibleAppointments = data.appointments.filter((item) => item.status !== "CANCELLED");
+  const pending = visibleAppointments.filter((item) => item.status === "PENDING");
+  const confirmed = visibleAppointments.filter((item) => item.status === "CONFIRMED");
+  const arrived = visibleAppointments.filter((item) => item.status === "ARRIVED");
+  const queueRows = [...visibleAppointments]
+    .sort((a, b) => new Date(a.time ?? 0).getTime() - new Date(b.time ?? 0).getTime())
+    .slice(0, 12);
+  const upcomingEnrollments = (data.enrollments ?? [])
+    .filter((item) => !["CONVERTED", "CANCELLED"].includes(item.status))
+    .slice(0, 6);
+  return `
+    <header class="page-header">
+      <div class="page-header__main">
+        <nav class="breadcrumb"><span class="breadcrumb__current">预约排期 · 门店日程总览</span></nav>
+        <h2 class="page-title">预约排期中心</h2>
+        <p class="page-sub">把预约确认、到店接诊和活动报名放进同一块视图里，方便前台和医生按时间连续处理。</p>
+      </div>
+    </header>
+    <section class="kpi-grid">
+      <div class="kpi-card kpi-card--rose">
+        <div class="kpi-card__label">待确认预约</div>
+        <div class="kpi-card__value">${pending.length}</div>
+        <div class="kpi-card__hint">需要尽快联系患者确认到店时间</div>
+      </div>
+      <div class="kpi-card kpi-card--amber">
+        <div class="kpi-card__label">已确认待到店</div>
+        <div class="kpi-card__value">${confirmed.length}</div>
+        <div class="kpi-card__hint">今日应接诊患者排队情况</div>
+      </div>
+      <div class="kpi-card kpi-card--teal">
+        <div class="kpi-card__label">已到店接诊</div>
+        <div class="kpi-card__value">${arrived.length}</div>
+        <div class="kpi-card__hint">已进入后续检查或治疗流程</div>
+      </div>
+      <div class="kpi-card kpi-card--indigo">
+        <div class="kpi-card__label">活动报名待跟进</div>
+        <div class="kpi-card__value">${upcomingEnrollments.length}</div>
+        <div class="kpi-card__hint">活动线索可直接转为预约接待</div>
+      </div>
+    </section>
+    <section class="clinic-appointments-layout">
+      <div class="panel appointment-table-card">
+        <div class="section-heading">
+          <div>
+            <span class="section-kicker">时间轴</span>
+            <h3>今日预约清单</h3>
+          </div>
+          <span class="section-count">${queueRows.length} 条排期</span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>时间</th><th>患者</th><th>项目</th><th>状态</th><th>处理</th></tr></thead>
+            <tbody>
+              ${queueRows.map((item) => {
+                const patientCell = item.patientName
+                  ? `<strong>${html(item.patientName)}</strong><div class="muted">${html(item.patientPhone ?? "")}</div>`
+                  : `<span class="muted">未绑定患者</span>`;
+                return `<tr>
+                  <td><strong>${item.time ? new Date(item.time).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) : "-"}</strong><div class="muted">${item.time ? new Date(item.time).toLocaleDateString() : ""}</div></td>
+                  <td>${patientCell}</td>
+                  <td><strong>${html(item.item)}</strong><div class="muted">${html(item.note ?? "标准预约流程")}</div></td>
+                  <td>${badge(labelOf(APPOINTMENT_STATUS_LABELS, item.status), item.status === "ARRIVED" ? "green" : item.status === "CONFIRMED" ? "blue" : "gold")}</td>
+                  <td class="actions">${appointmentActions(item)}</td>
+                </tr>`;
+              }).join("") || `<tr><td colspan="5" class="muted">暂无预约记录</td></tr>`}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="appointment-side-column">
+        <div class="panel appointment-queue-card">
+          <div class="section-heading">
+            <div>
+              <span class="section-kicker">优先处理</span>
+              <h3>确认队列</h3>
+            </div>
+          </div>
+          <div class="appointment-queue-list">
+            ${pending.map((item) => `<article>
+              <strong>${html(item.patientName || "未绑定患者")}</strong>
+              <p>${html(item.item)}</p>
+              <small>${item.time ? new Date(item.time).toLocaleString() : "待安排时间"}</small>
+            </article>`).join("") || `<div class="empty-state"><div class="empty-state__title">当前没有待确认预约</div></div>`}
+          </div>
+        </div>
+        <div class="panel appointment-queue-card">
+          <div class="section-heading">
+            <div>
+              <span class="section-kicker">活动线索</span>
+              <h3>报名转预约</h3>
+            </div>
+          </div>
+          <div class="appointment-queue-list">
+            ${upcomingEnrollments.map((item) => `<article>
+              <strong>${html(item.patientName || "匿名报名")}</strong>
+              <p>${html(item.source)} · ${html(labelOf(ENROLLMENT_STATUS_LABELS, item.status))}</p>
+              <small>${html(item.patientPhone ?? "暂无手机号")}</small>
+            </article>`).join("") || `<div class="empty-state"><div class="empty-state__title">暂无线索待转化</div></div>`}
+          </div>
+        </div>
+      </div>
+    </section>`;
+}
+
 function renderMedicalQaV2(data: Dashboard) {
   const qa = state.medicalQaAnswer;
   return `
@@ -2342,12 +2496,12 @@ function renderTreatments(data: Dashboard) {
   const actionLabel = (value: string) => value === "HOME_MEDICATION" ? "居家用药" : value === "RECHECK" ? "到店复查" : value === "OBSERVATION" ? "居家观察" : "到店上药";
   const statusLabel = (value: string) => value === "COMPLETED" ? "已完成" : value === "PERIOD_DELAYED" ? "经期顺延" : value === "NEEDS_ATTENTION" ? "待处理异常" : value === "PAUSED" ? "已暂停" : value === "PENDING_CONFIRMATION" ? "待确认" : "待执行";
   return `
-    <header class="page-header"><div class="page-header__main"><nav class="breadcrumb"><span class="breadcrumb__current">长期健康管理</span></nav><h2 class="page-title">疗程管理中心</h2><p class="page-sub">先选择患者，再集中查看她的疗程进度与执行排期。</p></div></header>
-    <section class="kpi-grid">
-      <div class="kpi-card kpi-card--teal"><div class="kpi-card__label">进行中疗程</div><div class="kpi-card__value">${treatments.filter((item) => ["ACTIVE","PERIOD_DELAYED","NEEDS_ATTENTION"].includes(item.status)).length}</div><div class="kpi-card__hint">已同步患者端</div></div>
-      <div class="kpi-card kpi-card--amber"><div class="kpi-card__label">今日执行</div><div class="kpi-card__value">${todayCount}</div><div class="kpi-card__hint">到店与居家任务</div></div>
-      <div class="kpi-card kpi-card--indigo"><div class="kpi-card__label">经期顺延</div><div class="kpi-card__value">${delayedCount}</div><div class="kpi-card__hint">已自动调整计划</div></div>
-      <div class="kpi-card kpi-card--rose"><div class="kpi-card__label">异常待处理</div><div class="kpi-card__value">${attentionCount}</div><div class="kpi-card__hint">患者反馈与改期</div></div>
+    <header class="page-header"><div class="page-header__main"><nav class="breadcrumb"><span class="breadcrumb__current">长期健康管理</span></nav><h2 class="page-title">疗程管理中心</h2><p class="page-sub">以患者为主线查看标准流程、已执行节点和待处理反馈，减少上下跳页带来的信息混乱。</p></div></header>
+    <section class="treatment-stat-strip">
+      <div><span>进行中疗程</span><strong>${treatments.filter((item) => ["ACTIVE","PERIOD_DELAYED","NEEDS_ATTENTION"].includes(item.status)).length}</strong><small>已同步患者端</small></div>
+      <div><span>今日执行</span><strong>${todayCount}</strong><small>到店与居家任务</small></div>
+      <div><span>经期顺延</span><strong>${delayedCount}</strong><small>自动避让月经周期</small></div>
+      <div><span>异常待处理</span><strong>${attentionCount}</strong><small>患者反馈与改期申请</small></div>
     </section>
     ${feedbackTreatments.length ? `<section class="panel treatment-feedback-queue">
       <div class="section-heading"><div><span class="section-kicker">需要医生处理</span><h3>患者反馈队列</h3></div><span class="section-count">${feedbackTreatments.length} 位患者</span></div>
@@ -2356,13 +2510,26 @@ function renderTreatments(data: Dashboard) {
         <span>${html(item.name)} · ${item.feedbacks?.length ?? 0} 条待处理反馈</span>
       </button>`).join("")}</div>
     </section>` : ""}
-    <section class="panel treatment-patient-filter">
-      <div><span class="section-kicker">患者疗程档案</span><h3>${selectedPatient ? `${html(selectedPatient.name)}的疗程` : "选择患者查看疗程"}</h3><p class="muted">每次只展示一位患者，执行排期更容易核对。</p></div>
-      <label>筛选患者<select data-treatment-patient-filter>${data.patients.map((item) => {
+    <section class="treatment-dashboard">
+      <aside class="panel treatment-patient-rail">
+        <div class="treatment-patient-rail__head"><span class="section-kicker">患者疗程档案</span><h3>${selectedPatient ? `${html(selectedPatient.name)}的疗程` : "选择患者查看疗程"}</h3><p class="muted">先锁定患者，再查看该患者的完整疗程、反馈和后续随访。</p></div>
+        <label>筛选患者<select data-treatment-patient-filter>${data.patients.map((item) => {
         const feedbackCount = treatments.filter((t) => t.patient?.id === item.id).reduce((sum, t) => sum + (t.feedbacks?.length ?? 0), 0);
         return `<option value="${html(item.id)}" ${item.id === selectedPatientId ? "selected" : ""}>${html(item.name)} · ${html(item.phone ?? "")}${feedbackCount ? ` · ${feedbackCount} 条待处理反馈` : ""}</option>`;
       }).join("")}</select></label>
-    </section>
+        <div class="treatment-patient-rail__list">
+          ${treatmentPatients.map((item) => {
+            const patientTreatments = treatments.filter((t) => t.patient?.id === item.id);
+            const openCount = patientTreatments.filter((t) => ["ACTIVE", "PERIOD_DELAYED", "NEEDS_ATTENTION"].includes(t.status)).length;
+            const flagCount = patientTreatments.reduce((sum, t) => sum + (t.feedbacks?.length ?? 0), 0);
+            return `<button type="button" class="${item.id === selectedPatientId ? "is-active" : ""}" data-treatment-feedback-patient="${html(item.id)}">
+              <strong>${html(item.name)}</strong>
+              <span>${openCount} 个进行中疗程 · ${flagCount} 条反馈</span>
+            </button>`;
+          }).join("") || `<div class="empty-state"><div class="empty-state__title">暂无疗程患者</div></div>`}
+        </div>
+      </aside>
+      <div class="treatment-main-column">
     ${canManage ? `<details class="panel action-panel treatment-create-panel" ${visibleTreatments.length ? "" : "open"}><summary><div><span class="section-kicker">创建新疗程</span><h3>从标准模板生成完整排期</h3></div><strong>展开创建</strong></summary><form id="treatmentCreateForm" class="form-grid">
       <label>患者<select name="patientId">${data.patients.map((item) => `<option value="${html(item.id)}" ${item.id === draftPatientId ? "selected" : ""}>${html(item.name)} · ${html(item.phone)}</option>`).join("")}</select></label>
       <label>疗程模板<select name="templateId">${templates.map((item) => `<option value="${html(item.id)}">${html(item.name)} · ${html(item.kit?.name)}</option>`).join("")}</select></label>
@@ -2397,7 +2564,9 @@ function renderTreatments(data: Dashboard) {
         <button type="submit">创建随访并发送站内通知</button>
       </form>
       <div class="table-wrap"><table><thead><tr><th>日期</th><th>随访主题</th><th>状态</th><th>操作</th></tr></thead><tbody>${visibleFollowUps.map((item) => `<tr><td>${html(item.dueDate)}</td><td><strong>${html(item.title)}</strong></td><td>${html(labelOf(FOLLOW_STATUS_LABELS, item.status))}</td><td><button data-follow="${html(item.id)}" ${item.status === "DONE" ? "disabled" : ""}>完成随访</button></td></tr>`).join("") || `<tr><td colspan="4" class="muted">暂未安排随访</td></tr>`}</tbody></table></div>
-    </section>` : ""}`;
+    </section>` : ""}
+      </div>
+    </section>`;
 }
 
 function badge(value: unknown, tone = "") {
@@ -2427,6 +2596,9 @@ function renderMarketing(data: Dashboard) {
     : s === "已下架" ? badge("已下架", "rose")
     : s === "已结束" ? badge("已结束", "muted")
     : badge(s || "—", "muted");
+  const totalLeads = trackedRows.reduce((sum, row) => sum + row.total, 0);
+  const activeCampaigns = trackedRows.filter((row) => row.campaign.status === "进行中").length;
+  const avgConversion = trackedRows.length ? Math.round(trackedRows.reduce((sum, row) => sum + row.conversionRate, 0) / trackedRows.length) : 0;
 
   return `
     <header class="page-header">
@@ -2436,7 +2608,14 @@ function renderMarketing(data: Dashboard) {
         <p class="page-sub">追踪活动从线索到成交的转化进度，并从总部模板快速启动新活动。</p>
       </div>
     </header>
-    <section class="panel data-panel">
+    <section class="clinic-summary-strip">
+      <div><span>已采纳活动</span><strong>${trackedRows.length}</strong><small>${activeCampaigns} 个仍在进行中</small></div>
+      <div><span>报名线索</span><strong>${totalLeads}</strong><small>全部门店活动线索汇总</small></div>
+      <div><span>平均转化率</span><strong>${avgConversion}%</strong><small>按当前采纳活动均值</small></div>
+      <div><span>总部模板</span><strong>${data.campaignTemplates.length}</strong><small>可快速采用的新活动</small></div>
+    </section>
+    <section class="clinic-content-board">
+      <div class="panel data-panel">
       <div class="toolbar"><h3>已采用活动追踪（${trackedRows.length}）</h3>${badge(`共 ${trackedRows.reduce((s, r) => s + r.total, 0)} 条报名`, "blue")}</div>
       <p class="muted">NEW（线索）→ CONTACTED（已联系）→ ATTENDED（已到店）→ CONVERTED（已成交）。本视图只展示本门店的活动漏斗。「<strong>已下架</strong>」的活动不再向患者端展示。</p>
       ${trackedRows.length === 0
@@ -2467,12 +2646,13 @@ function renderMarketing(data: Dashboard) {
               </tr>`;
             }).join("")}</tbody>
           </table></div>`}
-    </section>
-    <section class="panel template-library">
+      </div>
+    <section class="panel template-library clinic-side-panel">
       <div class="section-heading"><div><span class="section-kicker">可用素材</span><h3>总部活动模板</h3></div><span class="section-count">${data.campaignTemplates.length} 个模板</span></div>
       <div class="table-wrap"><table><thead><tr><th>模板</th><th>内容</th><th>动作</th></tr></thead><tbody>
         ${data.campaignTemplates.map((item) => `<tr><td>${html(item.title)}</td><td>${html(item.copy)}</td><td><button data-template="${html(item.id)}">采用</button></td></tr>`).join("")}
       </tbody></table></div>
+      </section>
     </section>`;
 }
 
@@ -2498,6 +2678,9 @@ function renderAiPanel(panelId: string, placeholder: string, hint: string) {
 }
 
 function renderArticles(data: Dashboard) {
+  const rows = data.clinicArticles ?? [];
+  const publishedCount = rows.filter((item) => item.status === "PUBLISHED").length;
+  const draftCount = rows.filter((item) => item.status === "DRAFT").length;
   return `
     <header class="page-header">
       <div class="page-header__main">
@@ -2506,6 +2689,12 @@ function renderArticles(data: Dashboard) {
         <p class="page-sub">创建本店专业内容，或采用总部模板快速发布到患者端。</p>
       </div>
     </header>
+    <section class="clinic-summary-strip">
+      <div><span>本店文章</span><strong>${rows.length}</strong><small>${publishedCount} 篇已发布</small></div>
+      <div><span>草稿待完善</span><strong>${draftCount}</strong><small>适合继续补充标题与摘要</small></div>
+      <div><span>总部模板</span><strong>${(data.articleTemplates ?? []).length}</strong><small>可快速采用的统一内容</small></div>
+      <div><span>患者同步</span><strong>${publishedCount}</strong><small>发布后会同步到患者端</small></div>
+    </section>
     <section class="clinic-creator-layout">
       <div class="panel creator-panel">
         <div class="section-kicker">内容创作</div>
@@ -2571,6 +2760,9 @@ const MARKETING_POST_STATUS_LABELS: Record<string, string> = {
 };
 
 function renderMarketingPosts(data: Dashboard) {
+  const rows = data.clinicMarketingPosts ?? [];
+  const publishedCount = rows.filter((item) => item.status === "PUBLISHED").length;
+  const draftCount = rows.filter((item) => item.status === "DRAFT").length;
   return `
     <header class="page-header">
       <div class="page-header__main">
@@ -2579,6 +2771,12 @@ function renderMarketingPosts(data: Dashboard) {
         <p class="page-sub">制作结构化宣传稿，并管理面向本店患者的发布状态。</p>
       </div>
     </header>
+    <section class="clinic-summary-strip">
+      <div><span>推送总量</span><strong>${rows.length}</strong><small>${publishedCount} 条已发布</small></div>
+      <div><span>草稿内容</span><strong>${draftCount}</strong><small>待补全图文与活动信息</small></div>
+      <div><span>总部营销模板</span><strong>${(data.marketingPostTemplates ?? []).length}</strong><small>统一活动素材库</small></div>
+      <div><span>消息触达</span><strong>${publishedCount}</strong><small>已发布内容会触发站内通知</small></div>
+    </section>
     <section class="clinic-creator-layout">
       <div class="panel creator-panel">
         <div class="section-kicker">营销内容创作</div>
@@ -2779,11 +2977,11 @@ function renderTasks(data: Dashboard) {
         <p class="page-sub">总部下发的运营任务，完成后系统会回传给总部统计完成率。</p>
       </div>
     </header>
-    <section class="grid four">
-      <div class="panel metric"><span class="muted">待办总数</span><strong>${summary?.total ?? pending.length}</strong></div>
-      <div class="panel metric"><span class="muted">今日到期</span><strong style="color:#d97706">${summary?.dueToday ?? 0}</strong></div>
-      <div class="panel metric"><span class="muted">已逾期</span><strong style="color:#dc2626">${summary?.overdue ?? 0}</strong></div>
-      <div class="panel metric"><span class="muted">紧急 + 高优</span><strong>${(summary?.byPriority?.URGENT ?? 0) + (summary?.byPriority?.HIGH ?? 0)}</strong></div>
+    <section class="task-summary-strip">
+      <div><span>待办总数</span><strong>${summary?.total ?? pending.length}</strong><small>总部统一下发</small></div>
+      <div><span>今日到期</span><strong>${summary?.dueToday ?? 0}</strong><small>建议优先处理</small></div>
+      <div><span>已逾期</span><strong>${summary?.overdue ?? 0}</strong><small>需要尽快补齐</small></div>
+      <div><span>高优先级</span><strong>${(summary?.byPriority?.URGENT ?? 0) + (summary?.byPriority?.HIGH ?? 0)}</strong><small>紧急与高优任务</small></div>
     </section>
     <section class="panel">
       <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
@@ -2812,8 +3010,8 @@ function renderTasks(data: Dashboard) {
         </div>
       </div>
     </section>
-    <section class="clinic-workspace-split clinic-workspace-split--tasks">
-      <div class="panel template-library">
+    <section class="task-dashboard">
+      <div class="panel template-library task-side-column">
         <div class="section-kicker">快捷创建</div>
         <h3>总部任务模板库</h3>
         <p class="muted">总部下发的常用任务模板，可一键采纳为待办。同一模板二次采纳会自动跳过。</p>
@@ -2826,7 +3024,7 @@ function renderTasks(data: Dashboard) {
           </tr>`).join("") || `<tr><td colspan="4" class="muted">暂无总部模板</td></tr>`}
         </tbody></table></div>
       </div>
-      <div class="panel data-panel">
+      <div class="panel data-panel task-main-column">
         <div class="section-heading"><div><span class="section-kicker">执行队列</span><h3>待办中心</h3></div><span class="section-count">${filteredPending.length} 项</span></div>
         <p class="muted">按紧急程度 + 到期时间排序，逾期 → 今日 → 未来。</p>
         ${filteredPending.length === 0 ? `<p class="muted" style="text-align:center;padding:20px">🎉 暂无待办</p>` : `

@@ -2631,548 +2631,6 @@ button.link-button:hover {
   }
 }
 
-/* Figma-aligned redesign layer: calm medical SaaS shell, dense tables, clear hierarchy. */
-:root {
-  --figma-bg: #f3f7fb;
-  --figma-sidebar: #fbf5ff;
-  --figma-sidebar-strong: #f1e8f6;
-  --figma-text: #25222c;
-  --figma-muted: #5e5868;
-  --figma-line: #d7cfe2;
-  --figma-purple: #563f94;
-  --figma-blue: #2f9fe2;
-  --figma-card: #fffaff;
-  --figma-shadow: 0 10px 26px rgba(72, 61, 92, .08);
-}
-
-body { background: var(--figma-bg); }
-
-.app--admin,
-.app--clinic {
-  --canvas: var(--figma-bg);
-  --surface: #fff;
-  --text: var(--figma-text);
-  --muted: var(--figma-muted);
-  --line: var(--figma-line);
-  background: var(--figma-bg) !important;
-  color: var(--figma-text);
-}
-
-.app--admin::before,
-.app--clinic::before,
-.app--admin .page-header::before,
-.app--clinic .page-header::before,
-.app--admin .page-header::after,
-.app--clinic .page-header::after,
-.panel::before,
-.kpi-card::before {
-  display: none !important;
-}
-
-.app--admin .topbar,
-.app--clinic .topbar {
-  top: 0;
-  height: 65px;
-  margin: 0;
-  padding: 0 25px 0 24px;
-  border: 0;
-  border-bottom: 1px solid var(--figma-line);
-  border-radius: 0;
-  background: rgba(255, 250, 255, .96);
-  box-shadow: none;
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-}
-
-.topbar .brand,
-.app--clinic .brand { gap: 12px; }
-
-.app--admin .brand-mark,
-.app--clinic .brand::before {
-  width: 32px;
-  height: 32px;
-  border-radius: 10px;
-  background: var(--figma-purple);
-  box-shadow: none;
-}
-
-.app--admin .brand-copy strong,
-.app--clinic .brand strong {
-  color: var(--figma-purple);
-  font-size: 22px;
-  font-weight: 800;
-  letter-spacing: 0;
-}
-
-.app--admin .brand-copy span,
-.app--clinic .brand span {
-  color: var(--figma-muted);
-  font-size: 13px;
-}
-
-.app--admin .topbar::after,
-.app--clinic .topbar::after {
-  content: "";
-  width: min(360px, 34vw);
-  height: 34px;
-  margin-left: auto;
-  border: 1px solid rgba(215, 207, 226, .72);
-  border-radius: 12px;
-  background:
-    linear-gradient(90deg, rgba(86, 63, 148, .72), rgba(86, 63, 148, .26)) 14px 50% / 14px 14px no-repeat,
-    rgba(248, 244, 252, .75);
-  opacity: .45;
-}
-
-.topbar .actions,
-.topbar > div:last-child { margin-left: 16px; }
-
-.shell-signal { display: none; }
-
-.app--admin .layout,
-.app--clinic .layout {
-  grid-template-columns: 262px minmax(0, 1fr);
-  gap: 0;
-  min-height: calc(100vh - 65px);
-  padding: 0;
-}
-
-.app--admin .sidebar,
-.app--clinic .sidebar {
-  top: 65px;
-  min-height: calc(100vh - 65px);
-  max-height: calc(100vh - 65px);
-  padding: 40px 17px 28px;
-  border: 0;
-  border-right: 1px solid rgba(215, 207, 226, .7);
-  border-radius: 0;
-  background: var(--figma-sidebar);
-  box-shadow: none;
-}
-
-.app--admin .sidebar button,
-.app--clinic .sidebar button {
-  position: relative;
-  justify-content: flex-start;
-  min-height: 41px;
-  margin: 2px 0;
-  padding: 10px 16px;
-  border: 0;
-  border-radius: 4px;
-  background: transparent;
-  color: #514b5b;
-  box-shadow: none;
-  font-size: 15px;
-  font-weight: 500;
-  transform: none;
-}
-
-.app--admin .sidebar button:hover,
-.app--clinic .sidebar button:hover {
-  transform: none;
-  background: rgba(241, 232, 246, .7);
-  color: var(--figma-purple);
-  box-shadow: none;
-}
-
-.app--admin .sidebar button.active,
-.app--clinic .sidebar button.active {
-  background: var(--figma-sidebar-strong);
-  color: var(--figma-purple);
-  box-shadow: none;
-  font-weight: 700;
-}
-
-.app--admin .sidebar button.active::before,
-.app--clinic .sidebar button.active::before {
-  display: block !important;
-  left: auto;
-  right: 0;
-  top: 0;
-  width: 4px;
-  height: 100%;
-  border-radius: 4px;
-  transform: none;
-  background: var(--figma-purple);
-  box-shadow: none;
-}
-
-.app--admin .sidebar-section,
-.clinic-nav-group {
-  padding-bottom: 12px;
-  margin-bottom: 12px;
-  border-bottom: 1px solid rgba(215, 207, 226, .8);
-}
-
-.app--admin .sidebar-section__head,
-.clinic-nav-group__label {
-  color: rgba(94, 88, 104, .72);
-  font-size: 11px;
-  letter-spacing: .08em;
-  text-transform: uppercase;
-}
-
-.sidebar-intelligence {
-  margin-top: 24px;
-  padding: 16px;
-  border: 1px solid rgba(215, 207, 226, .9);
-  border-radius: 8px;
-  background: #fffaff;
-  color: var(--figma-text);
-  box-shadow: none;
-}
-
-.sidebar-intelligence__eyebrow,
-.sidebar-intelligence small { color: var(--figma-muted); }
-
-.sidebar-intelligence button {
-  background: var(--figma-purple) !important;
-  color: #fff !important;
-}
-
-.app--admin .main,
-.app--clinic .main { padding: 28px 24px 72px; }
-
-.content-stage {
-  gap: 24px;
-  max-width: 1120px;
-  margin: 0 auto;
-  animation: none;
-}
-
-.workspace-tabs {
-  position: sticky;
-  top: 65px;
-  z-index: 20;
-  margin: -28px -24px 28px;
-  padding: 10px 24px 8px;
-  border-bottom: 1px solid rgba(215, 207, 226, .72);
-  background: rgba(243, 247, 251, .92);
-  backdrop-filter: blur(12px);
-}
-
-.workspace-tabs__rail { gap: 8px; }
-
-.workspace-tab {
-  border: 1px solid transparent;
-  border-radius: 4px;
-  background: transparent;
-  box-shadow: none;
-}
-
-.workspace-tab.is-active {
-  border-color: var(--figma-line);
-  background: #fffaff;
-  box-shadow: none;
-}
-
-.workspace-tab__signal { display: none; }
-
-.workspace-tab__target,
-.workspace-tab__close { color: #4d455d; }
-
-.app--admin .page-header,
-.app--clinic .page-header {
-  min-height: auto;
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  padding: 0;
-  border: 0;
-  border-radius: 0;
-  background: transparent;
-  box-shadow: none;
-}
-
-.breadcrumb {
-  padding: 0;
-  background: transparent;
-  color: var(--figma-purple);
-  font-size: 13px;
-  font-weight: 700;
-}
-
-.app--admin .page-title,
-.app--clinic .page-title {
-  margin: 6px 0 0;
-  color: var(--figma-text);
-  font-size: 30px;
-  font-weight: 800;
-  letter-spacing: 0;
-}
-
-.app--admin .page-sub,
-.app--clinic .page-sub {
-  max-width: 720px;
-  margin-top: 4px;
-  color: var(--figma-muted);
-  font-size: 15px;
-}
-
-.app--admin .panel,
-.app--clinic .panel,
-.app--admin .table-wrap,
-.app--clinic .table-wrap,
-.resource-controlbar,
-.clinic-dayflow,
-.overview-surface,
-.data-panel,
-.action-panel,
-.creator-panel,
-.template-library {
-  border: 1px solid var(--figma-line) !important;
-  border-radius: 7px !important;
-  background: rgba(255, 250, 255, .92) !important;
-  box-shadow: var(--figma-shadow) !important;
-}
-
-.app--admin .panel,
-.app--clinic .panel { padding: 22px 24px; }
-
-.app--admin .panel:hover,
-.app--clinic .panel:hover {
-  transform: none;
-  box-shadow: var(--figma-shadow) !important;
-}
-
-.app--admin .dash-kpi-row,
-.app--clinic .kpi-grid {
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 16px;
-}
-
-.app--admin .dash-kpi-row .kpi-card,
-.app--clinic .kpi-grid .kpi-card,
-.app--admin .dash-kpi-row .kpi-card:nth-child(n),
-.app--clinic .kpi-grid .kpi-card:nth-child(n),
-.overview-metric {
-  min-height: 116px;
-  padding: 18px 16px;
-  border: 1px solid var(--figma-line);
-  border-radius: 7px;
-  background: rgba(255, 250, 255, .94);
-  box-shadow: var(--figma-shadow);
-}
-
-.kpi-card__label,
-.overview-metric span {
-  color: #57515e;
-  font-size: 12px;
-  font-weight: 800;
-  letter-spacing: .04em;
-  text-transform: uppercase;
-}
-
-.kpi-card__label::before { display: none; }
-
-.app--admin .dash-kpi-row .kpi-card__value,
-.app--clinic .kpi-grid .kpi-card__value,
-.overview-metric strong {
-  margin-top: 10px;
-  color: var(--figma-text) !important;
-  font-size: 28px !important;
-  font-weight: 800;
-  letter-spacing: 0;
-}
-
-.app--admin .dash-kpi-row .kpi-card__hint,
-.app--clinic .kpi-grid .kpi-card__hint,
-.overview-metric p {
-  color: var(--figma-muted) !important;
-  font-size: 13px;
-}
-
-.clinic-dayflow {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 278px;
-  gap: 30px;
-  padding: 28px 24px;
-}
-
-.clinic-dayflow__intro {
-  padding: 0 0 14px;
-  border-radius: 0;
-  color: var(--figma-text);
-  background: transparent;
-}
-
-.clinic-dayflow__intro .eyebrow { color: var(--figma-blue); }
-
-.clinic-dayflow__intro strong {
-  color: var(--figma-text);
-  font-size: 22px;
-}
-
-.clinic-dayflow__steps {
-  grid-column: 1 / -1;
-  display: grid;
-  gap: 14px;
-}
-
-.clinic-dayflow__step {
-  display: grid;
-  grid-template-columns: 32px minmax(0, 1fr);
-  gap: 12px;
-  min-height: 72px;
-  padding: 14px 16px;
-  border: 1px solid rgba(215, 207, 226, .72);
-  border-radius: 5px;
-  background: #fff;
-}
-
-.clinic-dayflow__step span {
-  align-self: start;
-  width: 9px;
-  height: 9px;
-  margin: 8px auto 0;
-  overflow: hidden;
-  border-radius: 50%;
-  background: #d8d2df;
-}
-
-.clinic-dayflow__step.is-active span,
-.clinic-dayflow__step.is-attention span { background: var(--figma-blue); }
-
-.clinic-dayflow__step strong {
-  color: var(--figma-text);
-  font-size: 15px;
-}
-
-.clinic-dayflow__step small {
-  color: var(--figma-muted);
-  font-size: 13px;
-}
-
-.table-toolbar {
-  border: 0;
-  background: transparent;
-  box-shadow: none;
-}
-
-.table-wrap { overflow: hidden; }
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.app--admin th,
-.app--clinic th,
-.content-stage .table-wrap th {
-  height: 42px;
-  padding: 11px 24px;
-  border-bottom: 1px solid var(--figma-line);
-  background: #f8fbff;
-  color: #5a5560;
-  font-size: 12px;
-  font-weight: 800;
-  letter-spacing: .04em;
-  text-transform: uppercase;
-}
-
-.app--admin td,
-.app--clinic td,
-.content-stage .table-wrap td {
-  padding: 13px 24px;
-  border-bottom: 1px solid var(--figma-line);
-  color: var(--figma-text);
-  font-size: 14px;
-  vertical-align: middle;
-}
-
-.app--admin tbody tr:hover,
-.app--clinic tbody tr:hover { background: #fbf8ff; }
-
-.muted,
-small { color: var(--figma-muted); }
-
-button,
-button.primary {
-  border-radius: 4px;
-  background: var(--figma-purple);
-  box-shadow: none;
-  font-weight: 700;
-}
-
-button:hover,
-button.primary:hover {
-  background: #46327d;
-  box-shadow: none;
-}
-
-button.secondary {
-  border-color: var(--figma-line);
-  background: #fffaff;
-  color: var(--figma-purple);
-}
-
-button.secondary:hover {
-  border-color: var(--figma-purple);
-  background: #f6effb;
-}
-
-button.ghost { color: var(--figma-purple); }
-
-input,
-select,
-textarea {
-  border-color: var(--figma-line);
-  border-radius: 4px;
-  background-color: #fff;
-  box-shadow: none;
-}
-
-input:focus,
-select:focus,
-textarea:focus {
-  border-color: var(--figma-purple);
-  box-shadow: 0 0 0 3px rgba(86, 63, 148, .12);
-}
-
-.pill,
-.badge {
-  border-radius: 9px;
-  font-weight: 800;
-}
-
-.notif-dot { background: #c91d2d; }
-
-.message-detail,
-.drawer,
-.row-detail-sheet {
-  border-radius: 8px !important;
-  border: 1px solid var(--figma-line);
-  box-shadow: 0 22px 70px rgba(43, 35, 62, .18);
-}
-
-@media (max-width: 980px) {
-  .app--admin .layout,
-  .app--clinic .layout {
-    grid-template-columns: 1fr;
-  }
-
-  .app--admin .sidebar,
-  .app--clinic .sidebar {
-    position: relative;
-    top: 0;
-    min-height: 0;
-    max-height: none;
-    border-right: 0;
-    border-bottom: 1px solid var(--figma-line);
-  }
-
-  .app--admin .dash-kpi-row,
-  .app--clinic .kpi-grid,
-  .clinic-dayflow {
-    grid-template-columns: 1fr;
-  }
-
-  .app--admin .topbar::after,
-  .app--clinic .topbar::after {
-    display: none;
-  }
-}
-
 .knowledge-layout { display:grid; grid-template-columns:minmax(320px,.75fr) minmax(0,1.5fr); gap:16px; align-items:start; }
 .knowledge-composer,.knowledge-list { padding:20px; }
 .knowledge-composer { display:grid; gap:14px; position:sticky; top:16px; }
@@ -5864,6 +5322,448 @@ textarea {
   gap: 14px;
 }
 
+.dispatch-command {
+  display: grid;
+  gap: 14px;
+}
+
+.dispatch-command__heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  align-items: stretch;
+  padding: 24px 28px;
+  border: 1px solid rgba(255, 255, 255, .76);
+  border-radius: var(--radius-shell);
+  background: linear-gradient(145deg, rgba(8, 61, 63, .98), rgba(16, 93, 95, .96));
+  box-shadow: 0 20px 54px rgba(7, 55, 59, .18);
+}
+
+.dispatch-command__heading h2,
+.dispatch-command__heading p,
+.dispatch-command__heading span,
+.dispatch-command__badge strong,
+.dispatch-command__badge small {
+  color: #fff;
+}
+
+.dispatch-command__eyebrow {
+  color: rgba(156, 239, 229, .82) !important;
+  font-size: 10px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+
+.dispatch-command__heading h2 {
+  margin: 8px 0 6px;
+  font-size: 28px;
+}
+
+.dispatch-command__heading p {
+  max-width: 680px;
+  opacity: .8;
+}
+
+.dispatch-command__badge {
+  display: grid;
+  align-content: center;
+  gap: 4px;
+  min-width: 180px;
+  padding: 18px 20px;
+  border: 1px solid rgba(255, 255, 255, .1);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, .08);
+  text-align: right;
+}
+
+.dispatch-command__badge span {
+  opacity: .68;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+}
+
+.dispatch-command__badge strong {
+  font-size: 30px;
+  letter-spacing: -.04em;
+}
+
+.dispatch-summary-strip {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, .76);
+  border-radius: var(--radius-shell);
+  background: rgba(255, 255, 255, .84);
+  box-shadow: 0 18px 48px rgba(7, 55, 59, .075), inset 0 1px 0 #fff;
+}
+
+.dispatch-summary-strip > div {
+  display: grid;
+  gap: 4px;
+  padding: 18px 20px;
+  border-right: 1px solid rgba(7, 55, 59, .08);
+}
+
+.dispatch-summary-strip > div:last-child {
+  border-right: 0;
+}
+
+.dispatch-summary-strip span {
+  color: #84999b;
+  font-size: 10px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.dispatch-summary-strip strong {
+  color: #124b4e;
+  font-size: 24px;
+  letter-spacing: -.04em;
+}
+
+.dispatch-summary-strip small {
+  color: #6f8688;
+  font-size: 11px;
+}
+
+.dispatch-board {
+  display: grid;
+  gap: 16px;
+}
+
+.clinic-appointments-layout,
+.resource-content-grid,
+.treatment-dashboard,
+.clinic-content-board,
+.task-dashboard,
+.crm-workspace {
+  display: grid;
+  gap: 16px;
+}
+
+.clinic-appointments-layout {
+  grid-template-columns: minmax(0, 1.45fr) minmax(300px, .7fr);
+}
+
+.appointment-side-column,
+.treatment-main-column,
+.resource-main-column {
+  display: grid;
+  gap: 16px;
+}
+
+.appointment-table-card,
+.appointment-queue-card {
+  min-height: 100%;
+}
+
+.appointment-queue-list {
+  display: grid;
+  gap: 10px;
+}
+
+.appointment-queue-list article {
+  display: grid;
+  gap: 4px;
+  padding: 14px 16px;
+  border: 1px solid rgba(7, 55, 59, .08);
+  border-radius: 14px;
+  background: linear-gradient(145deg, rgba(246, 252, 251, .98), rgba(238, 248, 246, .88));
+}
+
+.appointment-queue-list p,
+.appointment-queue-list small {
+  margin: 0;
+}
+
+.treatment-stat-strip,
+.resource-summary-strip {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, .76);
+  border-radius: var(--radius-shell);
+  background: rgba(255, 255, 255, .84);
+  box-shadow: 0 18px 48px rgba(7, 55, 59, .075), inset 0 1px 0 #fff;
+}
+
+.treatment-stat-strip > div,
+.resource-summary-strip > div {
+  display: grid;
+  gap: 4px;
+  padding: 18px 20px;
+  border-right: 1px solid rgba(7, 55, 59, .08);
+}
+
+.treatment-stat-strip > div:last-child,
+.resource-summary-strip > div:last-child {
+  border-right: 0;
+}
+
+.treatment-stat-strip span,
+.resource-summary-strip span {
+  color: #84999b;
+  font-size: 10px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.treatment-stat-strip strong,
+.resource-summary-strip strong {
+  color: #124b4e;
+  font-size: 24px;
+  letter-spacing: -.04em;
+}
+
+.treatment-stat-strip small,
+.resource-summary-strip small {
+  color: #6f8688;
+  font-size: 11px;
+}
+
+.treatment-dashboard {
+  grid-template-columns: 320px minmax(0, 1fr);
+  align-items: start;
+}
+
+.treatment-patient-rail {
+  position: sticky;
+  top: 148px;
+  display: grid;
+  gap: 14px;
+}
+
+.treatment-patient-rail__head h3 {
+  margin: 4px 0 6px;
+  color: #163f42;
+}
+
+.treatment-patient-rail__list {
+  display: grid;
+  gap: 8px;
+}
+
+.treatment-patient-rail__list button {
+  display: grid;
+  justify-items: start;
+  gap: 4px;
+  width: 100%;
+  padding: 14px 15px;
+  border: 1px solid rgba(7, 55, 59, .08);
+  border-radius: 14px;
+  background: rgba(244, 251, 249, .85);
+  color: #1b4a4d;
+  text-align: left;
+  transform: none !important;
+}
+
+.treatment-patient-rail__list button.is-active {
+  border-color: rgba(14, 116, 111, .28);
+  background: linear-gradient(145deg, #e8faf6, #f7fcfb);
+  box-shadow: inset 0 0 0 1px rgba(14, 116, 111, .08);
+}
+
+.treatment-patient-rail__list button span {
+  color: #6d8385;
+  font-size: 11px;
+}
+
+.resource-content-grid {
+  grid-template-columns: minmax(0, 1fr) 280px;
+  align-items: start;
+}
+
+.clinic-content-board,
+.task-dashboard,
+.crm-workspace {
+  grid-template-columns: minmax(0, 1.35fr) minmax(320px, .75fr);
+  align-items: start;
+}
+
+.clinic-summary-strip,
+.task-summary-strip {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, .76);
+  border-radius: var(--radius-shell);
+  background: rgba(255, 255, 255, .84);
+  box-shadow: 0 18px 48px rgba(7, 55, 59, .075), inset 0 1px 0 #fff;
+}
+
+.clinic-summary-strip > div,
+.task-summary-strip > div {
+  display: grid;
+  gap: 4px;
+  padding: 18px 20px;
+  border-right: 1px solid rgba(7, 55, 59, .08);
+}
+
+.clinic-summary-strip > div:last-child,
+.task-summary-strip > div:last-child {
+  border-right: 0;
+}
+
+.clinic-summary-strip span,
+.task-summary-strip span {
+  color: #84999b;
+  font-size: 10px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.clinic-summary-strip strong,
+.task-summary-strip strong {
+  color: #124b4e;
+  font-size: 24px;
+  letter-spacing: -.04em;
+}
+
+.clinic-summary-strip small,
+.task-summary-strip small {
+  color: #6f8688;
+  font-size: 11px;
+}
+
+.clinic-side-panel,
+.task-side-column,
+.task-main-column,
+.crm-main-column,
+.crm-side-column {
+  min-height: 100%;
+}
+
+.crm-side-column {
+  display: grid;
+  gap: 16px;
+}
+
+.crm-side-card {
+  display: grid;
+  gap: 12px;
+}
+
+.crm-side-list {
+  display: grid;
+  gap: 10px;
+}
+
+.crm-side-list__item,
+.crm-side-list__stat {
+  display: grid;
+  gap: 4px;
+  padding: 14px 16px;
+  border: 1px solid rgba(7, 55, 59, .08);
+  border-radius: 14px;
+  background: linear-gradient(145deg, rgba(246, 252, 251, .98), rgba(238, 248, 246, .88));
+  color: #1b4a4d;
+  text-align: left;
+  transform: none !important;
+}
+
+.crm-side-list__item span,
+.crm-side-list__stat span {
+  color: #6d8385;
+  font-size: 11px;
+}
+
+.resource-insight-panel {
+  display: grid;
+  gap: 16px;
+}
+
+.resource-insight-card {
+  display: grid;
+  gap: 14px;
+  padding: 18px;
+  border: 1px solid rgba(255, 255, 255, .76);
+  border-radius: var(--radius-shell);
+  background: linear-gradient(165deg, rgba(11, 70, 72, .98), rgba(19, 101, 103, .94));
+  box-shadow: 0 18px 42px rgba(7, 55, 59, .16);
+  color: #fff;
+}
+
+.resource-insight-card > span {
+  color: rgba(164, 237, 228, .82);
+  font-size: 10px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.resource-insight-card h3 {
+  margin: 0;
+  color: #fff;
+  font-size: 20px;
+}
+
+.resource-insight-list {
+  display: grid;
+  gap: 10px;
+}
+
+.resource-insight-list > div {
+  display: grid;
+  gap: 3px;
+  padding: 12px 14px;
+  border: 1px solid rgba(255, 255, 255, .08);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, .06);
+}
+
+.resource-insight-list strong,
+.resource-insight-list small {
+  color: inherit;
+}
+
+@media (max-width: 1180px) {
+  .clinic-appointments-layout,
+  .resource-content-grid,
+  .treatment-dashboard,
+  .clinic-content-board,
+  .task-dashboard,
+  .crm-workspace {
+    grid-template-columns: 1fr;
+  }
+
+  .treatment-patient-rail {
+    position: static;
+  }
+}
+
+@media (max-width: 900px) {
+  .treatment-stat-strip,
+  .resource-summary-strip,
+  .clinic-summary-strip,
+  .task-summary-strip {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .treatment-stat-strip,
+  .resource-summary-strip,
+  .clinic-summary-strip,
+  .task-summary-strip {
+    grid-template-columns: 1fr;
+  }
+
+  .treatment-stat-strip > div,
+  .resource-summary-strip > div,
+  .clinic-summary-strip > div,
+  .task-summary-strip > div {
+    border-right: 0;
+    border-bottom: 1px solid rgba(7, 55, 59, .08);
+  }
+
+  .treatment-stat-strip > div:last-child,
+  .resource-summary-strip > div:last-child,
+  .clinic-summary-strip > div:last-child,
+  .task-summary-strip > div:last-child {
+    border-bottom: 0;
+  }
+}
+
 @keyframes drawer-enter {
   from { opacity: .6; transform: translateX(36px); }
   to { opacity: 1; transform: translateX(0); }
@@ -6049,6 +5949,12 @@ textarea {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .dispatch-summary-strip,
+  .clinic-summary-strip,
+  .task-summary-strip {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .reports-summary-item:nth-child(n) {
     border-top: 1px solid rgba(255, 255, 255, .1);
     border-right: 1px solid rgba(255, 255, 255, .1);
@@ -6098,6 +6004,7 @@ textarea {
   }
 
   .notification-command__head,
+  .dispatch-command__heading,
   .agent-command,
   .agent-detail-command {
     align-items: stretch;
@@ -6116,161 +6023,5 @@ textarea {
   .app--admin .dash-kpi-row .kpi-card:nth-child(n),
   .app--clinic .kpi-grid .kpi-card:nth-child(n) {
     grid-column: 1 / -1;
-  }
-}
-
-/* Final Figma override: this must stay at the end so it wins over legacy cockpit styles. */
-.app--admin,
-.app--clinic {
-  background: var(--figma-bg) !important;
-}
-
-.app--admin::before,
-.app--clinic::before,
-.app--admin .page-header::before,
-.app--clinic .page-header::before,
-.app--admin .page-header::after,
-.app--clinic .page-header::after,
-.app--admin .panel::before,
-.app--clinic .panel::before,
-.app--admin .kpi-card::before,
-.app--clinic .kpi-card::before {
-  display: none !important;
-}
-
-.app--admin .topbar,
-.app--clinic .topbar {
-  top: 0 !important;
-  height: 65px !important;
-  margin: 0 !important;
-  padding: 0 25px 0 24px !important;
-  border: 0 !important;
-  border-bottom: 1px solid var(--figma-line) !important;
-  border-radius: 0 !important;
-  background: rgba(255, 250, 255, .96) !important;
-  box-shadow: none !important;
-}
-
-.app--admin .brand-mark,
-.app--clinic .brand::before {
-  background: var(--figma-purple) !important;
-  box-shadow: none !important;
-}
-
-.app--admin .layout,
-.app--clinic .layout {
-  grid-template-columns: 262px minmax(0, 1fr) !important;
-  gap: 0 !important;
-  padding: 0 !important;
-}
-
-.app--admin .sidebar,
-.app--clinic .sidebar {
-  top: 65px !important;
-  min-height: calc(100vh - 65px) !important;
-  max-height: calc(100vh - 65px) !important;
-  padding: 40px 17px 28px !important;
-  border: 0 !important;
-  border-right: 1px solid rgba(215, 207, 226, .7) !important;
-  border-radius: 0 !important;
-  background: var(--figma-sidebar) !important;
-  box-shadow: none !important;
-}
-
-.app--admin .sidebar button,
-.app--clinic .sidebar button {
-  border-radius: 4px !important;
-  background: transparent !important;
-  color: #514b5b !important;
-  box-shadow: none !important;
-  transform: none !important;
-}
-
-.app--admin .sidebar button.active,
-.app--clinic .sidebar button.active {
-  background: var(--figma-sidebar-strong) !important;
-  color: var(--figma-purple) !important;
-  font-weight: 700 !important;
-}
-
-.app--admin .main,
-.app--clinic .main {
-  padding: 28px 24px 72px !important;
-}
-
-.app--admin .page-header,
-.app--clinic .page-header {
-  min-height: auto !important;
-  padding: 0 !important;
-  border: 0 !important;
-  border-radius: 0 !important;
-  background: transparent !important;
-  box-shadow: none !important;
-}
-
-.app--admin .page-title,
-.app--clinic .page-title {
-  font-size: 30px !important;
-  letter-spacing: 0 !important;
-}
-
-.app--admin .panel,
-.app--clinic .panel,
-.app--admin .table-wrap,
-.app--clinic .table-wrap,
-.app--admin .kpi-card,
-.app--clinic .kpi-card,
-.overview-surface,
-.overview-metric,
-.resource-controlbar,
-.clinic-dayflow,
-.data-panel,
-.action-panel,
-.creator-panel,
-.template-library {
-  border: 1px solid var(--figma-line) !important;
-  border-radius: 7px !important;
-  background: rgba(255, 250, 255, .92) !important;
-  box-shadow: var(--figma-shadow) !important;
-}
-
-.app--admin .panel:hover,
-.app--clinic .panel:hover {
-  transform: none !important;
-}
-
-.app--admin .dash-kpi-row,
-.app--clinic .kpi-grid {
-  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-  gap: 16px !important;
-}
-
-.app--admin .dash-kpi-row .kpi-card,
-.app--clinic .kpi-grid .kpi-card,
-.app--admin .dash-kpi-row .kpi-card:nth-child(n),
-.app--clinic .kpi-grid .kpi-card:nth-child(n) {
-  grid-column: auto !important;
-  min-height: 116px !important;
-  padding: 18px 16px !important;
-  color: var(--figma-text) !important;
-}
-
-.app--admin th,
-.app--clinic th,
-.content-stage .table-wrap th {
-  background: #f8fbff !important;
-  color: #5a5560 !important;
-}
-
-.app--admin td,
-.app--clinic td,
-.content-stage .table-wrap td {
-  color: var(--figma-text) !important;
-}
-
-@media (max-width: 980px) {
-  .app--admin .layout,
-  .app--clinic .layout {
-    grid-template-columns: 1fr !important;
   }
 }

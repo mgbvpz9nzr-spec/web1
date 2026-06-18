@@ -1,0 +1,1104 @@
+/* 患者档案详情（工作区 tab）专用样式 */
+
+.patient-detail-subtabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 16px;
+  padding: 5px;
+  border: 1px solid var(--line, rgba(15, 23, 42, 0.08));
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(8px);
+  width: max-content;
+  max-width: 100%;
+}
+
+.patient-detail-subtabs button {
+  padding: 8px 18px;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  color: var(--text-soft, #475569);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.patient-detail-subtabs button:hover {
+  background: rgba(20, 184, 166, 0.08);
+  color: var(--brand, #0d9488);
+}
+
+.patient-detail-subtabs button.is-active {
+  background: linear-gradient(135deg, #0d9488, #14b8a6);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(13, 148, 136, 0.25);
+}
+
+.patient-detail-subtabs button.is-active:hover {
+  background: linear-gradient(135deg, #0d9488, #14b8a6);
+  color: #fff;
+}
+
+/* 月经记录行 inline 展开（5 大块完整详情） */
+tr.menstrual-expanded-row > td {
+  background: var(--surface-soft, #f8fafc);
+  padding: 0 18px 18px;
+}
+
+.menstrual-detail {
+  display: grid;
+  gap: 14px;
+  padding-top: 14px;
+}
+
+.menstrual-detail__block {
+  padding: 16px;
+  border: 1px solid var(--line, rgba(15, 23, 42, 0.08));
+  border-radius: 16px;
+  background: #fff;
+}
+
+.menstrual-detail__title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--brand, #0d9488);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 12px;
+}
+
+.menstrual-detail__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 10px;
+}
+
+.menstrual-detail__field {
+  display: grid;
+  gap: 3px;
+}
+
+.menstrual-detail__field label {
+  font-size: 11px;
+  color: var(--muted, #6b7280);
+  font-weight: 600;
+}
+
+.menstrual-detail__field strong {
+  font-size: 14px;
+  color: var(--text, #111827);
+  font-weight: 700;
+  word-break: break-word;
+}
+
+.menstrual-detail__field--full {
+  grid-column: 1 / -1;
+}
+
+.menstrual-detail__notes {
+  white-space: pre-wrap;
+  line-height: 1.7;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: var(--surface-soft, #f8fafc);
+  font-size: 13px;
+}
+
+.menstrual-detail__ai-block {
+  display: grid;
+  gap: 4px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: var(--surface-soft, #f8fafc);
+}
+
+.menstrual-detail__ai-block span {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--brand, #0d9488);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.menstrual-detail__ai-block p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.7;
+  white-space: pre-wrap;
+}
+
+.menstrual-detail__meds {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.menstrual-detail__meds span {
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--surface-soft, #f8fafc);
+  font-size: 12px;
+}
+
+.menstrual-detail__meds strong {
+  font-weight: 700;
+  color: var(--brand, #0d9488);
+  margin-right: 4px;
+}
+
+/* 14 天经期概率条形图（不引入图表库，纯 div） */
+.menstrual-sparkline {
+  display: flex;
+  gap: 2px;
+  align-items: flex-end;
+  height: 36px;
+  font-family: monospace;
+}
+
+.menstrual-sparkline__bar {
+  width: 18px;
+  background: linear-gradient(180deg, #0d9488, #14b8a6);
+  border-radius: 3px 3px 0 0;
+  position: relative;
+  min-height: 2px;
+  transition: height 0.2s ease;
+}
+
+.menstrual-sparkline__bar:hover {
+  background: linear-gradient(180deg, #14b8a6, #0d9488);
+}
+
+.menstrual-sparkline__bar span {
+  position: absolute;
+  top: -16px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 9px;
+  color: var(--muted, #6b7280);
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+/* AI 对话历史（医生端只读，按天分组 + 气泡） */
+.ai-chat-day {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.ai-chat-day__label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--muted, #6b7280);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 4px 12px;
+  background: var(--surface-soft, #f8fafc);
+  border-radius: 999px;
+  width: max-content;
+}
+
+.ai-chat-day__bubbles {
+  display: grid;
+  gap: 10px;
+}
+
+.ai-chat-bubble {
+  display: grid;
+  gap: 6px;
+  padding: 14px 18px;
+  border-radius: 18px;
+  font-size: 14px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-break: break-word;
+  border: 1px solid var(--line, rgba(15, 23, 42, 0.08));
+  max-width: 80%;
+}
+
+.ai-chat-bubble--assistant {
+  background: linear-gradient(135deg, #f0fdfa, #fff);
+  border-color: rgba(20, 184, 166, 0.25);
+  justify-self: start;
+  border-bottom-left-radius: 6px;
+}
+
+.ai-chat-bubble--user {
+  background: linear-gradient(135deg, #fdf2f8, #fff);
+  border-color: rgba(236, 72, 153, 0.25);
+  justify-self: end;
+  border-bottom-right-radius: 6px;
+}
+
+.ai-chat-bubble__role {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--muted, #6b7280);
+  letter-spacing: 0.04em;
+}
+
+.ai-chat-bubble--assistant .ai-chat-bubble__role {
+  color: var(--brand, #0d9488);
+}
+
+.ai-chat-bubble--user .ai-chat-bubble__role {
+  color: var(--rose-dark, #be185d);
+}
+
+.ai-chat-bubble__text {
+  margin: 0;
+}
+
+/* ====================================================================== */
+/* 月经板块重构（2026-06-11）：层次化 / 紧凑 / 按年分组可折叠                */
+/* ====================================================================== */
+
+/* 模式 HERO：醒目的状态横幅，模式决定配色 */
+.menstrual-hero {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 20px;
+  padding: 22px 26px;
+  border-radius: 24px;
+  background: linear-gradient(135deg, #0d9488 0%, #14b8a6 100%);
+  color: #fff;
+  box-shadow: 0 12px 28px rgba(13, 148, 136, 0.2);
+  overflow: hidden;
+}
+
+.menstrual-hero::before {
+  content: "";
+  position: absolute;
+  right: -40px;
+  top: -40px;
+  width: 160px;
+  height: 160px;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 50%;
+}
+
+.menstrual-hero__icon {
+  width: 64px;
+  height: 64px;
+  display: grid;
+  place-items: center;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.2);
+  font-size: 32px;
+  font-weight: 800;
+  backdrop-filter: blur(8px);
+  position: relative;
+  z-index: 1;
+}
+
+.menstrual-hero__body {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 4px;
+}
+
+.menstrual-hero__eyebrow {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.85;
+}
+
+.menstrual-hero__title {
+  font-size: 24px;
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.menstrual-hero__dates {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  font-size: 12px;
+  font-weight: 600;
+  opacity: 0.95;
+}
+
+.menstrual-hero__dates span {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.menstrual-hero__risk {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 6px;
+  text-align: right;
+  justify-items: end;
+}
+
+.menstrual-hero__risk-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.85;
+}
+
+.menstrual-hero__risk-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.95);
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--brand, #0d9488);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.menstrual-hero__risk-chip.is-urgent {
+  color: #b91c1c;
+  animation: menstrual-pulse 1.8s ease-in-out infinite;
+}
+
+.menstrual-hero__risk-chip.is-care {
+  color: #b45309;
+}
+
+.menstrual-hero__risk-chip.is-observe {
+  color: #1d4ed8;
+}
+
+@keyframes menstrual-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4); }
+  50% { box-shadow: 0 0 0 8px rgba(255, 255, 255, 0); }
+}
+
+/* 模式变体：备孕（玫红）/ 怀孕（紫粉）/ 宝妈（暖橙）/ 经期（teal）/ 隐藏（灰）*/
+.menstrual-hero--prepare {
+  background: linear-gradient(135deg, #db2777 0%, #ec4899 100%);
+  box-shadow: 0 12px 28px rgba(219, 39, 119, 0.2);
+}
+.menstrual-hero--pregnant {
+  background: linear-gradient(135deg, #9333ea 0%, #c084fc 100%);
+  box-shadow: 0 12px 28px rgba(147, 51, 234, 0.2);
+}
+.menstrual-hero--mom {
+  background: linear-gradient(135deg, #ea580c 0%, #fb923c 100%);
+  box-shadow: 0 12px 28px rgba(234, 88, 12, 0.2);
+}
+.menstrual-hero--hide, .menstrual-hero--unset {
+  background: linear-gradient(135deg, #475569 0%, #64748b 100%);
+  box-shadow: 0 12px 28px rgba(71, 85, 105, 0.2);
+}
+.menstrual-hero--prepare .menstrual-hero__risk-chip { color: #db2777; }
+.menstrual-hero--pregnant .menstrual-hero__risk-chip { color: #9333ea; }
+.menstrual-hero--mom .menstrual-hero__risk-chip { color: #ea580c; }
+.menstrual-hero--hide .menstrual-hero__risk-chip,
+.menstrual-hero--unset .menstrual-hero__risk-chip { color: #475569; }
+
+/* 6 卡紧凑指标行 */
+.menstrual-metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+}
+
+.menstrual-metric {
+  display: grid;
+  gap: 4px;
+  padding: 14px 16px;
+  border: 1px solid var(--line, rgba(15, 23, 42, 0.08));
+  border-radius: 16px;
+  background: #fff;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.menstrual-metric:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.06);
+}
+
+.menstrual-metric__label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--muted, #6b7280);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.menstrual-metric__value {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--text, #111827);
+  letter-spacing: -0.02em;
+}
+
+.menstrual-metric__hint {
+  font-size: 11px;
+  color: var(--muted, #6b7280);
+  font-weight: 500;
+}
+
+.menstrual-metric--highlight {
+  background: linear-gradient(135deg, #f0fdfa 0%, #fff 100%);
+  border-color: rgba(20, 184, 166, 0.3);
+}
+
+.menstrual-metric--highlight .menstrual-metric__value {
+  color: var(--brand, #0d9488);
+}
+
+/* 预测条带（更紧凑） */
+.menstrual-prediction {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 14px 18px;
+  border: 1px solid var(--line, rgba(15, 23, 42, 0.08));
+  border-radius: 18px;
+  background: #fff;
+}
+
+.menstrual-prediction__item {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.menstrual-prediction__item:not(:last-child) {
+  padding-right: 16px;
+  border-right: 1px solid var(--line, rgba(15, 23, 42, 0.08));
+}
+
+.menstrual-prediction__label {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--muted, #6b7280);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.menstrual-prediction__value {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text, #111827);
+  white-space: nowrap;
+}
+
+.menstrual-prediction__sparkline {
+  flex: 1;
+  min-width: 200px;
+}
+
+/* AI 评估 2 列布局 */
+.menstrual-ai {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 16px;
+}
+
+.menstrual-ai__primary, .menstrual-ai__metrics {
+  display: grid;
+  gap: 10px;
+}
+
+.menstrual-ai__primary {
+  grid-column: 1;
+}
+
+.menstrual-ai__metrics {
+  grid-column: 2;
+}
+
+@media (max-width: 900px) {
+  .menstrual-ai {
+    grid-template-columns: 1fr;
+  }
+  .menstrual-ai__primary, .menstrual-ai__metrics {
+    grid-column: 1;
+  }
+}
+
+/* 按年分组的时间线 */
+.menstrual-year-group {
+  border: 1px solid var(--line, rgba(15, 23, 42, 0.08));
+  border-radius: 18px;
+  background: #fff;
+  overflow: hidden;
+  margin-bottom: 12px;
+  transition: box-shadow 0.2s ease;
+}
+
+.menstrual-year-group:hover {
+  box-shadow: 0 6px 14px rgba(15, 23, 42, 0.04);
+}
+
+.menstrual-year-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  padding: 14px 18px;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  transition: background 0.15s ease;
+}
+
+.menstrual-year-head:hover {
+  background: var(--surface-soft, #f8fafc);
+}
+
+.menstrual-year-head__left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.menstrual-year-head__year {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--text, #111827);
+  letter-spacing: -0.02em;
+}
+
+.menstrual-year-head__count {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--muted, #6b7280);
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: var(--surface-soft, #f8fafc);
+}
+
+.menstrual-year-head__stats {
+  display: flex;
+  gap: 16px;
+  font-size: 11px;
+  color: var(--muted, #6b7280);
+  font-weight: 600;
+}
+
+.menstrual-year-head__stats b {
+  color: var(--text, #111827);
+  font-weight: 700;
+}
+
+.menstrual-year-head__caret {
+  font-size: 18px;
+  color: var(--muted, #6b7280);
+  transition: transform 0.2s ease;
+}
+
+.menstrual-year-group.is-open .menstrual-year-head__caret {
+  transform: rotate(90deg);
+}
+
+.menstrual-year-body {
+  display: none;
+  border-top: 1px solid var(--line, rgba(15, 23, 42, 0.08));
+}
+
+.menstrual-year-group.is-open .menstrual-year-body {
+  display: block;
+}
+
+/* 风险色行：在每行最左侧加 4px 风险色条 + 整行轻度背景色 */
+.menstrual-records-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.menstrual-records-table th {
+  font-size: 10px;
+  font-weight: 800;
+  color: var(--muted, #6b7280);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 10px 14px;
+  text-align: left;
+  background: var(--surface-soft, #f8fafc);
+  border-bottom: 1px solid var(--line, rgba(15, 23, 42, 0.08));
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.menstrual-records-table td {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--line, rgba(15, 23, 42, 0.08));
+  font-size: 13px;
+  color: var(--text, #111827);
+  vertical-align: middle;
+}
+
+.menstrual-records-table tbody tr {
+  position: relative;
+  transition: background 0.15s ease;
+}
+
+.menstrual-records-table tbody tr:hover {
+  background: var(--surface-soft, #f8fafc);
+}
+
+.menstrual-records-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.menstrual-records-table .date-cell {
+  font-weight: 700;
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 13px;
+  color: var(--text, #111827);
+  white-space: nowrap;
+}
+
+.menstrual-records-table .duration-cell {
+  color: var(--muted, #6b7280);
+  font-size: 12px;
+}
+
+.menstrual-records-table .risk-bar {
+  display: inline-block;
+  width: 4px;
+  height: 28px;
+  border-radius: 2px;
+  margin-right: 10px;
+  vertical-align: middle;
+}
+
+.menstrual-records-table tr.risk-row--urgent {
+  background: rgba(239, 68, 68, 0.05);
+}
+.menstrual-records-table tr.risk-row--urgent:hover {
+  background: rgba(239, 68, 68, 0.09);
+}
+.menstrual-records-table tr.risk-row--care {
+  background: rgba(245, 158, 11, 0.04);
+}
+
+.menstrual-records-table .expand-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 12px;
+  border: 1px solid var(--line, rgba(15, 23, 42, 0.12));
+  border-radius: 999px;
+  background: #fff;
+  color: var(--brand, #0d9488);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.menstrual-records-table .expand-trigger:hover {
+  background: var(--brand, #0d9488);
+  color: #fff;
+  border-color: var(--brand, #0d9488);
+}
+
+.menstrual-records-table .expand-trigger.is-open {
+  background: var(--brand, #0d9488);
+  color: #fff;
+  border-color: var(--brand, #0d9488);
+}
+
+/* 详情面板：5 大块，3-2 grid，更紧凑 */
+.menstrual-detail--grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  padding: 18px 20px;
+}
+
+.menstrual-detail--grid .menstrual-detail__block {
+  grid-column: span 1;
+}
+
+.menstrual-detail--grid .menstrual-detail__block--wide {
+  grid-column: span 3;
+}
+
+.menstrual-detail--grid .menstrual-detail__block--half {
+  grid-column: span 2;
+}
+
+@media (max-width: 1200px) {
+  .menstrual-detail--grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .menstrual-detail--grid .menstrual-detail__block--wide {
+    grid-column: span 2;
+  }
+  .menstrual-detail--grid .menstrual-detail__block--half {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 760px) {
+  .menstrual-detail--grid {
+    grid-template-columns: 1fr;
+  }
+  .menstrual-detail--grid .menstrual-detail__block,
+  .menstrual-detail--grid .menstrual-detail__block--wide,
+  .menstrual-detail--grid .menstrual-detail__block--half {
+    grid-column: span 1;
+  }
+}
+
+/* 空状态/异常提示 */
+.menstrual-empty {
+  padding: 32px 24px;
+  text-align: center;
+  color: var(--muted, #6b7280);
+  font-size: 13px;
+  background: var(--surface-soft, #f8fafc);
+  border-radius: 14px;
+  border: 1px dashed var(--line, rgba(15, 23, 42, 0.12));
+}
+
+/* CRM 列表行可点击提示 */
+.crm-row {
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.crm-row:hover {
+  background: linear-gradient(90deg, rgba(20, 184, 166, 0.06) 0%, rgba(20, 184, 166, 0.02) 100%);
+}
+
+.crm-row:hover .crm-row__chevron {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.crm-row__chevron {
+  display: inline-block;
+  margin-left: 8px;
+  font-size: 14px;
+  color: var(--brand, #0d9488);
+  opacity: 0.25;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  transform: translateX(-4px);
+}
+
+.crm-row__chevron::after {
+  content: "›";
+  font-weight: 700;
+}
+
+/* ====================================================================== */
+/* 月经板块强化 — 更强烈的段落层次 + 紧凑排版                             */
+/* ====================================================================== */
+
+/* 各面板之间的间隔加大 */
+.menstrual-hero + section,
+section.panel + section.panel {
+  margin-top: 20px;
+}
+
+/* HERO 下方不再需要额外间距（靠 panel margin-top 处理） */
+.menstrual-hero {
+  margin-bottom: 0;
+}
+
+/* 各面板标题行强化 */
+.data-panel .section-heading {
+  padding: 16px 20px 0;
+}
+
+.data-panel .section-heading .section-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, rgba(13, 148, 136, 0.08), rgba(20, 184, 166, 0.05));
+  color: var(--brand, #0d9488);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.data-panel .section-heading h3 {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--text, #111827);
+  letter-spacing: -0.02em;
+  margin: 0;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--line, rgba(15, 23, 42, 0.06));
+}
+
+.data-panel .section-heading {
+  padding-top: 20px;
+}
+
+/* 指标卡片 — 加大 hover 动效 + 渐变分隔 */
+.menstrual-metrics {
+  padding: 16px 18px 18px;
+}
+
+/* 预测面板内部紧凑化 */
+.menstrual-prediction {
+  margin: 14px 18px 6px;
+}
+
+/* AI 评估面板紧凑化 */
+.menstrual-ai {
+  padding: 14px 18px 18px;
+}
+
+/* 年度折叠 — 加强头部的视觉分量 */
+.menstrual-year-head {
+  border-bottom: 1px solid transparent;
+}
+
+.menstrual-year-group.is-open .menstrual-year-head {
+  border-bottom: 1px solid var(--line, rgba(15, 23, 42, 0.06));
+  background: var(--surface-soft, #f8fafc);
+}
+
+/* 记录表格行 — 更紧凑 */
+.menstrual-records-table tbody tr {
+  transition: all 0.12s ease;
+}
+
+.menstrual-records-table .expand-trigger {
+  white-space: nowrap;
+}
+
+/* 风险行 — 更强的左侧色条 */
+.menstrual-records-table .date-cell .risk-bar {
+  box-shadow: 0 0 6px currentColor;
+}
+
+/* 展开详情 — 平滑过渡 */
+.menstrual-expanded-row td {
+  animation: menstrual-expand-in 0.2s ease;
+}
+
+@keyframes menstrual-expand-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* 面板间明显分隔：每个 section.panel 顶部加左侧色条 */
+section.panel.data-panel {
+  position: relative;
+  border: 1px solid var(--line, rgba(15, 23, 42, 0.08));
+  border-radius: 20px;
+  overflow: visible;
+}
+
+section.panel.data-panel::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: linear-gradient(180deg, #0d9488, #14b8a6);
+  border-radius: 0 2px 2px 0;
+}
+
+/* HERO 不用左侧色条 */
+section.panel.data-panel ~ section.panel.data-panel::before {
+  background: linear-gradient(180deg, #a78bfa, #c084fc);
+}
+
+/* 第 3 个面板用玫瑰色 */
+section.panel.data-panel:nth-of-type(4)::before {
+  background: linear-gradient(180deg, #ec4899, #f472b6);
+}
+
+/* 空状态增强 */
+.menstrual-empty {
+  margin: 16px 0;
+}
+
+.cervical-agent-layout { display:grid; grid-template-columns:minmax(320px,.8fr) minmax(0,1.4fr); gap:16px; align-items:start; }
+.cervical-agent-composer,.cervical-agent-result { padding:20px; }
+.cervical-agent-composer { display:grid; gap:16px; position:sticky; top:16px; }
+.cervical-agent-composer label,.cervical-agent-result label { display:grid; gap:7px; font-weight:700; color:var(--text); }
+.cervical-agent-composer textarea,.cervical-agent-result textarea { min-height:92px; resize:vertical; }
+.cervical-upload { padding:14px; border:1px dashed var(--line); background:var(--surface-soft); }
+.cervical-upload small { font-weight:400; color:var(--muted); }
+.cervical-alert { margin:14px 0; padding:14px 16px; border-left:4px solid #b7791f; background:#fff8e7; color:#704b12; }
+.cervical-alert p { margin:5px 0 0; }
+.cervical-alert--source { border-left-color:#0f766e; background:#eef8f6; color:#164e47; }
+.cervical-result-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+.cervical-result-grid > div { border:1px solid var(--line); padding:14px; background:var(--surface-soft); }
+.cervical-result-grid h4,.cervical-recommendations h4 { margin:0 0 8px; }
+.cervical-result-grid ul { margin:0; padding-left:18px; color:var(--muted); }
+.cervical-recommendations { margin:16px 0; }
+.cervical-recommendations article { display:flex; gap:12px; padding:12px 0; border-top:1px solid var(--line); }
+.cervical-recommendations article > span { min-width:58px; color:var(--brand); font-size:11px; font-weight:800; }
+.cervical-recommendations p { margin:4px 0 0; color:var(--muted); }
+.cervical-review-actions { display:flex; justify-content:flex-end; gap:8px; margin-top:10px; }
+.cervical-evidence { display:flex; gap:8px; flex-wrap:wrap; margin-top:16px; padding-top:14px; border-top:1px solid var(--line); }
+.cervical-evidence span { padding:4px 8px; border:1px solid var(--line); background:var(--surface-soft); font-size:12px; }
+@media (max-width: 980px) { .cervical-agent-layout { grid-template-columns:1fr; } .cervical-agent-composer { position:static; } }
+@media (max-width: 620px) { .cervical-result-grid { grid-template-columns:1fr; } }
+
+.knowledge-query-layout { display:grid; grid-template-columns:minmax(300px,.72fr) minmax(0,1.5fr); gap:16px; align-items:start; }
+.knowledge-query-form,.knowledge-query-results { padding:20px; }
+.knowledge-query-form { display:grid; gap:16px; position:sticky; top:16px; }
+.knowledge-query-form label { display:grid; gap:7px; font-weight:700; color:var(--text); }
+.knowledge-query-form textarea { min-height:120px; resize:vertical; }
+.knowledge-workflow-nav { display:flex; gap:4px; margin-bottom:14px; padding:4px; border:1px solid var(--line); background:var(--surface-soft); overflow-x:auto; }
+.knowledge-workflow-nav button { flex:1; min-width:150px; border:0; background:transparent; color:var(--muted); }
+.knowledge-workflow-nav button.is-active { background:var(--surface); color:var(--text); box-shadow:0 1px 3px rgba(21,47,42,.09); }
+.knowledge-workflow-nav button:disabled { opacity:.42; cursor:not-allowed; }
+.knowledge-workflow-stage { max-width:1120px; }
+.knowledge-query-form--focused { max-width:760px; position:static; }
+.knowledge-quality-row { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); margin:4px 0 18px; border:1px solid var(--line); background:var(--surface-soft); }
+.knowledge-quality-row div { padding:14px 16px; border-right:1px solid var(--line); }
+.knowledge-quality-row div:last-child { border-right:0; }
+.knowledge-quality-row strong,.knowledge-quality-row span { display:block; }
+.knowledge-quality-row strong { font-size:20px; color:var(--text); }
+.knowledge-quality-row span { margin-top:3px; font-size:12px; color:var(--muted); }
+.recommendation-title-row { display:flex; justify-content:space-between; gap:12px; align-items:flex-start; }
+.recommendation-title-row em { flex:none; padding:3px 7px; border-radius:999px; background:#eef3f2; color:var(--muted); font-size:11px; font-style:normal; }
+.evidence-supported .recommendation-title-row em { background:#e3f5ed; color:#1f7458; }
+.evidence-partially_supported .recommendation-title-row em { background:#fff4d8; color:#7b5a0b; }
+.evidence-unsupported .recommendation-title-row em { background:#fde8e7; color:#9b3733; }
+.treatment-system-section { margin-top:20px; padding-top:18px; border-top:1px solid var(--line); }
+.treatment-system-section > h4,.treatment-system-grid h4 { margin:0 0 12px; }
+.treatment-system-section > ul { margin:0; padding-left:20px; color:var(--muted); }
+.treatment-goals { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; margin-top:16px; }
+.treatment-goals article { display:flex; gap:10px; padding:14px; background:var(--surface-soft); border:1px solid var(--line); }
+.treatment-goals article > span { color:var(--brand); font-size:11px; font-weight:800; }
+.treatment-goals p,.treatment-phases p,.treatment-system-grid p { margin:5px 0; color:var(--muted); }
+.treatment-phases { display:grid; gap:10px; }
+.treatment-phases article { display:grid; grid-template-columns:32px minmax(0,1fr); gap:12px; padding:16px; background:var(--surface-soft); }
+.treatment-phases article > span { display:grid; place-items:center; width:28px; height:28px; border-radius:50%; background:var(--brand); color:#fff; font-weight:800; }
+.treatment-phases h5 { margin:12px 0 5px; }
+.treatment-phases ul { margin:0; padding-left:18px; color:var(--muted); }
+.intervention-table { border:1px solid var(--line); overflow-x:auto; }
+.intervention-row { display:grid; grid-template-columns:110px minmax(220px,1fr) 140px minmax(220px,1fr); min-width:760px; border-top:1px solid var(--line); }
+.intervention-row:first-child { border-top:0; }
+.intervention-row span { padding:10px 12px; border-right:1px solid var(--line); }
+.intervention-row span:last-child { border-right:0; }
+.intervention-head { background:var(--surface-soft); font-weight:800; }
+.treatment-system-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; margin-top:20px; }
+.treatment-system-grid > div { padding:14px; border:1px solid var(--line); }
+.treatment-system-grid article { padding:10px 0; border-top:1px solid var(--line); }
+.treatment-system-grid article:first-of-type { border-top:0; }
+.knowledge-context-strip { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin:0 0 16px; padding:12px 14px; background:#eef8f6; border:1px solid #cce8e3; }
+.knowledge-context-strip span { padding:4px 8px; background:#fff; border:1px solid var(--line); font-size:12px; }
+.knowledge-query-list { display:grid; gap:12px; }
+.knowledge-query-list article { display:grid; grid-template-columns:36px minmax(0,1fr); gap:12px; padding:16px; border:1px solid var(--line); background:var(--surface-soft); }
+.knowledge-query-rank { display:grid; place-items:center; width:30px; height:30px; border-radius:50%; background:var(--brand); color:#fff; font-weight:800; }
+.knowledge-query-title { display:flex; gap:10px; align-items:center; justify-content:space-between; }
+.knowledge-query-title span { padding:3px 7px; border:1px solid var(--line); background:#fff; color:var(--muted); font-size:11px; white-space:nowrap; }
+.knowledge-query-list small { display:block; margin-top:5px; color:var(--muted); }
+.knowledge-query-list p { margin:10px 0 0; line-height:1.7; white-space:pre-wrap; }
+.knowledge-source-card { display:grid; gap:14px; padding:16px; border:1px solid var(--line); background:var(--surface-soft); }
+.knowledge-source-card__head { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; }
+.knowledge-upload-actions { display:flex; flex-wrap:wrap; gap:10px; }
+.knowledge-upload-trigger { display:inline-flex; align-items:center; justify-content:center; min-height:40px; cursor:pointer; }
+.knowledge-file-list,
+.knowledge-history-list,
+.plan-option-list { display:grid; gap:12px; }
+.knowledge-file-chip,
+.knowledge-history-item,
+.plan-option-card { display:grid; gap:10px; padding:14px; border:1px solid var(--line); background:#fff; }
+.knowledge-file-chip { grid-template-columns:minmax(0,1fr) auto; align-items:center; }
+.knowledge-file-chip strong,
+.knowledge-history-item strong,
+.plan-option-card strong { color:var(--text); }
+.knowledge-file-chip small,
+.knowledge-history-item small,
+.knowledge-history-item p,
+.plan-option-card__summary,
+.plan-option-card__head p { color:var(--muted); }
+.knowledge-history-item { grid-template-columns:auto minmax(0,1fr); align-items:flex-start; }
+.knowledge-history-item input { margin-top:4px; }
+.knowledge-history-item__title { display:flex; align-items:center; justify-content:space-between; gap:10px; }
+.knowledge-history-item__title span { padding:3px 8px; border-radius:999px; background:var(--brand-soft); color:var(--brand); font-size:12px; }
+.knowledge-history-item.is-active { border-color:var(--brand); box-shadow:0 0 0 1px rgba(15,118,110,.18); }
+.plan-option-card__head { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; }
+.plan-option-card__section { display:grid; gap:10px; }
+.plan-option-card__subgrid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+.plan-option-card__grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; }
+.plan-option-card__grid > div { padding:12px; border:1px solid var(--line); background:var(--surface-soft); }
+.plan-option-card__subgrid > div { padding:12px; border:1px solid var(--line); background:var(--surface-soft); }
+.plan-option-card__subgrid ul,
+.plan-option-card__grid ul { margin:0; padding-left:18px; color:var(--muted); }
+.plan-stage-list { display:grid; gap:12px; }
+.plan-stage-card { padding:14px; border:1px solid var(--line); background:var(--surface-soft); }
+.plan-stage-card__head { display:grid; grid-template-columns:32px minmax(0,1fr); gap:12px; align-items:flex-start; }
+.plan-stage-card__head > span { display:grid; place-items:center; width:28px; height:28px; border-radius:50%; background:var(--brand); color:#fff; font-weight:800; }
+.plan-stage-card__head p { margin:5px 0 0; color:var(--muted); }
+.plan-stage-card__grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin-top:14px; }
+.plan-stage-card__grid > div { padding:12px; border:1px solid var(--line); background:#fff; }
+.plan-stage-card__grid h5 { margin:0 0 8px; }
+.plan-stage-card__grid ul { margin:0; padding-left:18px; color:var(--muted); }
+.doctor-plan-paper { display:grid; gap:18px; padding:28px; border:1px solid #d8d1c3; background:linear-gradient(180deg,#fffdf8,#fffaf0); box-shadow:0 16px 36px rgba(91,67,29,.08); }
+.doctor-plan-paper__head { padding-bottom:16px; border-bottom:2px solid #d7b46a; }
+.doctor-plan-paper__head > span { display:inline-flex; margin-bottom:10px; padding:4px 10px; border:1px solid #d7b46a; color:#7b5416; font-size:12px; font-weight:800; letter-spacing:.08em; }
+.doctor-plan-paper__head h3 { margin:0; font-size:24px; line-height:1.25; color:#2d2417; }
+.doctor-plan-paper__head p,.doctor-plan-paper__intro p,.doctor-plan-paper__body p { color:#3f3526; line-height:1.8; font-size:15px; }
+.doctor-plan-paper__intro,.doctor-plan-paper__body { display:grid; gap:8px; }
+.doctor-plan-paper__intro h4,.doctor-plan-paper__body h4 { margin:0; color:#7b5416; font-size:15px; letter-spacing:.04em; }
+.doctor-plan-paper__body p { margin:0; padding:10px 0; border-top:1px solid rgba(123,84,22,.16); }
+.doctor-plan-paper__body p:first-of-type { border-top:0; }
+.doctor-plan-step { padding:12px 0; border-top:1px solid rgba(123,84,22,.18); }
+.doctor-plan-step:first-of-type { border-top:0; }
+.doctor-plan-step h5 { margin:0 0 6px; color:#2d2417; font-size:17px; }
+.doctor-plan-paper__body--warning { padding:14px; border:1px solid #e9c6a3; background:#fff7ed; }
+.doctor-plan-paper__body--review { padding:14px; border:1px solid #b9d7cf; background:#f0fbf8; }
+.empty-state--inline { padding:12px 0; }
+.medical-qa-layout { display:grid; grid-template-columns:minmax(300px,.75fr) minmax(0,1.4fr); gap:16px; align-items:start; }
+.medical-qa-composer,.medical-qa-answer { padding:20px; }
+.medical-qa-composer { display:grid; gap:14px; position:sticky; top:16px; }
+.medical-qa-composer textarea { min-height:180px; resize:vertical; }
+.medical-qa-content { line-height:1.85; color:var(--text); white-space:normal; }
+.medical-qa-content > *:first-child { margin-top:0; }
+.medical-qa-content > *:last-child { margin-bottom:0; }
+.medical-qa-content h1,
+.medical-qa-content h2,
+.medical-qa-content h3,
+.medical-qa-content h4 { margin:18px 0 10px; line-height:1.4; color:var(--text); font-weight:700; }
+.medical-qa-content h1 { font-size:20px; }
+.medical-qa-content h2 { font-size:18px; }
+.medical-qa-content h3 { font-size:16px; }
+.medical-qa-content h4 { font-size:15px; }
+.medical-qa-content p { margin:10px 0; }
+.medical-qa-content ul,
+.medical-qa-content ol { margin:10px 0; padding-left:22px; }
+.medical-qa-content li { margin:4px 0; }
+.medical-qa-content strong { font-weight:700; color:var(--text); }
+.medical-qa-content em { font-style:normal; color:var(--brand); }
+.medical-qa-content blockquote { margin:12px 0; padding:8px 14px; border-left:3px solid var(--brand); background:var(--surface-soft); color:var(--muted); }
+.medical-qa-content code { padding:1px 6px; border-radius:4px; background:var(--surface-soft); border:1px solid var(--line); font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:0.92em; }
+.medical-qa-content pre { margin:12px 0; padding:12px 14px; background:var(--surface-soft); border:1px solid var(--line); border-radius:8px; overflow-x:auto; }
+.medical-qa-content pre code { padding:0; border:0; background:transparent; }
+.medical-qa-content hr { border:0; border-top:1px solid var(--line); margin:16px 0; }
+.medical-qa-content a { color:var(--brand); text-decoration:underline; }
+.medical-qa-content .md-citation { display:inline-block; padding:0 6px; margin:0 1px; border-radius:10px; background:var(--brand-soft); color:var(--brand); font-size:12px; font-weight:600; }
+@media (max-width: 980px) { .medical-qa-layout { grid-template-columns:1fr; } .medical-qa-composer { position:static; } }
+@media (max-width: 980px) { .knowledge-query-layout { grid-template-columns:1fr; } .knowledge-query-form { position:static; } .knowledge-quality-row { grid-template-columns:repeat(2,minmax(0,1fr)); } .knowledge-quality-row div:nth-child(2) { border-right:0; } .knowledge-quality-row div:nth-child(-n+2) { border-bottom:1px solid var(--line); } .treatment-goals,.treatment-system-grid,.plan-option-card__subgrid,.plan-option-card__grid,.plan-stage-card__grid { grid-template-columns:1fr; } .knowledge-file-chip,.knowledge-history-item { grid-template-columns:1fr; } }

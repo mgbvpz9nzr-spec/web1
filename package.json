@@ -1,0 +1,22 @@
+{
+  "name": "qsyl-web1",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev:admin": "vite --config apps/admin/vite.config.ts --host 0.0.0.0 --port 3003",
+    "dev:clinic": "vite --config apps/clinic/vite.config.ts --host 0.0.0.0 --port 3002",
+    "build": "npm-run-all build:admin build:clinic",
+    "build:admin": "vite build --config apps/admin/vite.config.ts",
+    "build:clinic": "vite build --config apps/clinic/vite.config.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@vitejs/plugin-vue": "^6.0.7",
+    "vite": "^8.0.16",
+    "typescript": "^5.9.2"
+  },
+  "devDependencies": {
+    "npm-run-all": "^4.1.5"
+  }
+}
